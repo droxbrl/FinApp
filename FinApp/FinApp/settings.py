@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'FinancialAssistant.apps.FinancialassistantConfig',
     # Регистрация приложения users
     'users.apps.UsersConfig',
-    'bootstrap3',
 ]
 
 MIDDLEWARE = [

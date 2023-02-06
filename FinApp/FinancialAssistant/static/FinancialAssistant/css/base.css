@@ -1,7 +1,7 @@
-* {
-    margin: 0;
-    padding: 0;
-}
+/** {*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*}*/
 
 body {
     background-color: #fff;
@@ -73,6 +73,36 @@ body {
     padding-top: 5px;
 }
 
-.text-input-form{
+/*.register-login-form {*/
+/*    width: 500px;*/
+/*    border-radius: 5px;*/
+/*    background-color: #f2f2f2;*/
+/*    padding: 5px;*/
+/*}*/
 
+.form-control {
+    width: 250px;
+    padding: 12px 20px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
+
+.helptext {
+    font-size: 75%
+}
+
+.register-login-button {
+    background-color: #53bd84;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+

@@ -1,15 +1,15 @@
 {% extends 'FinancialAssistant/base.html' %}
 
 {% block content %}
+    <div class="register-login-form">
+        <form method="post" name="post" action="{% url 'users:register' %}">
 
-    <form method="post" name="post" action="{% url 'users:register' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
 
-        {% csrf_token %}
-        {{ form.as_p }}
+            <button class="register-login-button" name="submit">register</button>
+            <input type="hidden" name="next" value="{% url 'FinancialAssistant:index' %}"/>
 
-        <button name="submit">register</button>
-        <input type="hidden" name="next" value="{% url 'FinancialAssistant:index' %}"/>
-
-    </form>
-
+        </form>
+    </div>
 {% endblock %}

@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Регистрация приложения FinancialAssistant
     'FinancialAssistant.apps.FinancialassistantConfig',
+    # Регистрация приложения users
+    'users.apps.UsersConfig',
+    'bootstrap3',
 ]
 
 MIDDLEWARE = [

@@ -3,26 +3,23 @@
 {% load bootstrap4 %}
 
 {% block title %}
-    Registration
+    Log in
 {% endblock %}
 
 {% block form %}
 
     {# Display a form #}
 
-    <form role="form" method="post" action="{% url 'users:register' %}">
+    <form role="form" method="post" action="{% url 'users:login' %}">
         {% csrf_token %}
         {% bootstrap_form form %}
         {% buttons %}
-            <button type="submit" class="btn btn-outline-primary">
-                Register
+            <button type="submit" class="btn btn-outline-primary" style="margin-top:10px">
+                Log in
             </button>
         {% endbuttons %}
         <input type="hidden" name="next" value="{% url 'FinancialAssistant:index' %}"/>
-        {% if not user.is_authenticated %}
-            <p class="text-center">If you already have an account, <a href="{% url 'users:login' %}">login</a> instead.
-            </p>
-        {% endif %}
+        <p class="text-center">Don't have an account? <a href="{% url 'users:register' %}">Create an account</a>.</p>
     </form>
 
 {% endblock %}

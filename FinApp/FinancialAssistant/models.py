@@ -1,3 +1,4 @@
+"""Модели базы данных."""
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator
@@ -10,7 +11,7 @@ class TelegramUser(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Telegram_user <telegram id: {self.tg_id},  user: {self.user.__str__()}>'
+        return f'Telegram user <telegram id: {self.tg_id},  user: {self.user.__str__()}>'
 
 
 class OverallBudget(models.Model):
@@ -19,7 +20,7 @@ class OverallBudget(models.Model):
     users = models.ManyToManyField(User)
 
     def __str__(self):
-        return f'Overall_budget <name: {self.name}>'
+        return f'Overall budget <name: {self.name}>'
 
 
 class Currency(models.Model):
@@ -64,11 +65,11 @@ class OperationType(models.Model):
     check_minus = models.BooleanField(default=False, blank=True)
 
     def __str__(self):
-        return f'Operation_type <type: {self.type}, check_minus {self.check_minus}>'
+        return f'Operation type <type: {self.type}, check_minus {self.check_minus}>'
 
 
 class CashFlow(models.Model):
-    """Модель учета денежных потоков."""
+    """Модель учета денежных потоков. Основная таблица, все отчеты готовим по данным этой таблицы."""
     date_time = models.DateTimeField(default=datetime.now())
     amount = models.FloatField()
     type = models.ForeignKey(OperationType, on_delete=models.SET_NULL, null=True)
@@ -77,11 +78,11 @@ class CashFlow(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
-        """Перегружаю метод для проверки знака перед записью. Для расхода нужно добавлять -"""
+        """Перегружаю метод для проверки знака перед записью. Для расхода нужно добавлять '-', если его еще нет"""
         if self.type.check_minus and self.amount > 0:
             self.amount *= -1
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'CashFlow <amount: {self.amount}, type: {self.type}, ' \
+        return f'Cash flow <amount: {self.amount}, type: {self.type}, ' \
                f'category: {self.category}, currency: {self.currency}, added: {self.date_time}>'

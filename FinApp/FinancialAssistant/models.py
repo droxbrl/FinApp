@@ -76,6 +76,7 @@ class CashFlow(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     currency = models.ForeignKey(Currency, on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    family = models.ForeignKey(OverallBudget, on_delete=models.SET_NULL, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         """Перегружаю метод для проверки знака перед записью. Для расхода нужно добавлять '-', если его еще нет"""

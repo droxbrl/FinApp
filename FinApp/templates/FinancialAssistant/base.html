@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+
+        {% endblock %} | FinApp
+    </title>
+    {% block css %}
+        <link rel="stylesheet" href="{% static 'FinancialAssistant/css/base.css' %}">
+    {% endblock %}
+
+    {% block css_additional %}
+
+    {% endblock %}
+</head>
+
+<div class="menu-wrap">
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Reports</a>
+            <ul>
+                <li><a href="#">Income</a></li>
+                <li><a href="#">Expense</a></li>
+            </ul>
+        <li><a href="#">Add data</a></li>
+        <li><a href="#">Login</a></li>
+        <li><a href="#">Logout</a></li>
+    </ul>
+</div>
+
+<div class="content-title">
+    {% block content-title %}
+
+    {% endblock %}
+</div>
+
+<div class="content">
+    {% block content %}
+
+    {% endblock %}
+</div>
+
+
+
+<body>
+
+</body>
+</html>

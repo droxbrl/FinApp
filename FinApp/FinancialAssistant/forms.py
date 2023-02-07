@@ -38,7 +38,7 @@ class OverallBudgetSettings(forms.ModelForm):
         }
 
 
-class CategorySettings(forms.ModelForm):
+class CategoryForm(forms.ModelForm):
     """Форма настроек катерогий учета."""
 
     class Meta:
@@ -50,7 +50,7 @@ class CategorySettings(forms.ModelForm):
         }
 
 
-class CurrencySettings(forms.ModelForm):
+class CategoryForm(forms.ModelForm):
     """Форма настроек семейного учета."""
 
     class Meta:

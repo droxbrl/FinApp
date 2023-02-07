@@ -51,10 +51,34 @@ class CategoryDetailView(DetailView):
     model = Category
 
 
-class UpdateEditView(UpdateView):
+class CategoryUpdateView(UpdateView):
     """Вью редактирования категории."""
     model = Category
+    template_name = 'FinancialAssistant/category_update.html'
     fields = ['name', ]
+
+
+class CurrencyCreateView(CreateView):
+    """Вью создания категории."""
+    model = Currency
+    fields = ['code', 'num', 'name']
+
+    def form_valid(self, form):
+        """Для подстановки user's."""
+        form.instance.user = self.request.user
+        return super(CurrencyCreateView, self).form_valid(form)
+
+
+class CurrencyDetailView(DetailView):
+    """Вью просмотра категории."""
+    model = Currency
+
+
+class CurrencyUpdateView(UpdateView):
+    """Вью редактирования категории."""
+    model = Currency
+    template_name = 'FinancialAssistant/currency_update.html'
+    fields = ['code', 'num', 'name']
 
 
 def check_owner(user, owner):

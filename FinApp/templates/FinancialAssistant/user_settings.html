@@ -42,7 +42,9 @@
                 <li><p>No categories have been added yet.</p></li>
             {% endfor %}
             <br>
-            <p><a href="{% url 'FinancialAssistant:category_form' %}" class="btn btn-primary link">add new category</a></p>
+            <p>
+                <a href="{% url 'FinancialAssistant:category_form' %}" class="btn btn-primary link">add new category</a>
+            </p>
         </ul>
     </div>
 
@@ -52,13 +54,14 @@
         <ul class="list-group list-group-flush">
             {% for currency in currency_data %}
                 <li class="list-group-item">
-                    <a href="{ # }">{{ currency }}</a>
+                    <a href="{% url 'FinancialAssistant:currency_detail' currency.id %}">{{ currency }}</a>
                 </li>
             {% empty %}
                 <li><p>No currencies have been added yet.</p></li>
             {% endfor %}
             <br>
-            <p><a href="#" class="btn btn-primary link">add new currency</a></p>
+            <p><a href="{% url 'FinancialAssistant:currency_form' %}" class="btn btn-primary link">add new currency</a>
+            </p>
         </ul>
     </div>
 

@@ -45,6 +45,10 @@ class Currency(models.Model):
     def __str__(self):
         return f'{self.name} ({self.code})'
 
+    def get_absolute_url(self):
+        return reverse('FinancialAssistant:currency_detail', args=(str(self.id)))
+
+
 
 class Category(models.Model):
     """Модель категории."""

@@ -12,7 +12,7 @@
         <h1>Category: {{ category.name }}</h1>
         <p>
           Name: {{ category.name }}
-          <a href="{ # }">edit</a>
+          <a href="{% url 'FinancialAssistant:category_update' category.pk %}">edit</a>
         </p>
     </div>
 {% endblock %}

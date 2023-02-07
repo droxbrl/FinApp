@@ -49,7 +49,7 @@
                         <a class="nav-link" href="{% url 'users:logout' %}">Log out</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">User settings</a>
+                        <a class="nav-link" href="{% url 'FinancialAssistant:user_settings' %}">User settings</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
@@ -65,25 +65,16 @@
     </div>
 </nav>
 
-<main role="main" class="container">
-    <div class="form-data"
+{% block content-title %}
 
-            {#         style="margin-top:80px; margin-left: 50px; padding-right: 1000px"#}
-    >
-        {% block form %}
+{% endblock %}
 
-        {% endblock %}
 
-        {% block content-title %}
+{% block content %}
 
-        {% endblock %}
-        <div class="pb-2 mb-2 border-bottom">
-            {% block content %}
+{% endblock %}
 
-            {% endblock %}
-        </div>
-    </div>
-</main>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>

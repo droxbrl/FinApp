@@ -6,20 +6,20 @@
     Log in
 {% endblock %}
 
-{% block form %}
-
-    {# Display a form #}
-
-    <form role="form" method="post" action="{% url 'users:login' %}">
-        {% csrf_token %}
-        {% bootstrap_form form %}
-        {% buttons %}
-            <button type="submit" class="btn btn-outline-primary" style="margin-top:10px">
-                Log in
-            </button>
-        {% endbuttons %}
-        <input type="hidden" name="next" value="{% url 'FinancialAssistant:index' %}"/>
-        <p class="text-center">Don't have an account? <a href="{% url 'users:register' %}">Create an account</a>.</p>
-    </form>
-
+{% block content %}
+    <div class="container">
+        {# Display a form #}
+        <form role="form" method="post" action="{% url 'users:login' %}">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            {% buttons %}
+                <button type="submit" class="btn btn-outline-primary" style="margin-top:10px">
+                    Log in
+                </button>
+            {% endbuttons %}
+            <input type="hidden" name="next" value="{% url 'FinancialAssistant:index' %}"/>
+            <p class="text-center">Don't have an account? <a href="{% url 'users:register' %}">Create an account</a>.
+            </p>
+        </form>
+    </div>
 {% endblock %}

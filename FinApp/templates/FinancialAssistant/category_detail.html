@@ -1,0 +1,18 @@
+{% extends 'FinancialAssistant/base.html' %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{% block title %}
+    {{ category.name }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>Category: {{ category.name }}</h1>
+        <p>
+          Name: {{ category.name }}
+          <a href="{ # }">edit</a>
+        </p>
+    </div>
+{% endblock %}

@@ -16,6 +16,7 @@ class CategoryCreateView(CreateView):
     """Вью создания категории."""
     model = Category
     fields = ['name', ]
+    success_url = reverse_lazy('FinancialAssistant:user_settings')
 
     def form_valid(self, form):
         """Для подстановки user's."""
@@ -39,6 +40,7 @@ class CurrencyCreateView(CreateView):
     """Вью создания категории."""
     model = Currency
     fields = ['code', 'num', 'name']
+    success_url = reverse_lazy('FinancialAssistant:user_settings')
 
     def form_valid(self, form):
         """Для подстановки user's."""
@@ -115,7 +117,7 @@ def user_settings(request):
     category_data = Category.objects.filter(user=request.user)
     currency_data = Currency.objects.filter(user=request.user)
     app_user = get_app_user(user=request.user)
-    family_data={}
+    family_data = {}
     if app_user.family:
         family_members = []
         for member in AppUser.objects.filter(family=app_user.family):

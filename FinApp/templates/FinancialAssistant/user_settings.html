@@ -26,17 +26,19 @@
             <p> No family budget created yet, you can <a href="{% url 'FinancialAssistant:new_family_budget' %}"> create
                 one</a>.</p>
         {% endif %}
-        {% if family_data.family_members_names %}
-            <ul class="list-group list-group-flush">
-            <p> You are sharing family budget with </p>
-            {% for member_name in family_data.family_members_names %}
-                <li class="list-group-item"> {{ member_name }} </li>
-            {% endfor %}
-        {% else %}
-            <li class="list-group-item"> ...yourself!</li>
-        {% endif %}
-        <br>
-        <p><a href="#" class="btn btn-primary link">edit family budget info</a></p>
+        <ul class="list-group list-group-flush">
+            {% if family_data %}
+                <p> You are sharing family budget with </p>
+                {% if  family_data.family_members_names %}
+                    {% for member_name in family_data.family_members_names %}
+                        <li class="list-group-item"> {{ member_name }} </li>
+                    {% endfor %}
+                {% else %}
+                    <li class="list-group-item"> ...yourself!</li>
+                {% endif %}
+                <br>
+                <p><a href="#" class="btn btn-primary link">edit family budget info</a></p>
+            {% endif %}
         </ul>
     </div>
 
@@ -49,7 +51,7 @@
                     <a href="{% url 'FinancialAssistant:category_detail' category.id %}">{{ category }}</a>
                 </li>
             {% empty %}
-                <li><p>No categories have been added yet.</p></li>
+                <p>No categories have been added yet.</p>
             {% endfor %}
             <br>
             <p>
@@ -67,7 +69,7 @@
                     <a href="{% url 'FinancialAssistant:currency_detail' currency.id %}">{{ currency }}</a>
                 </li>
             {% empty %}
-                <li><p>No currencies have been added yet.</p></li>
+                <p>No currencies have been added yet.</p>
             {% endfor %}
             <br>
             <p><a href="{% url 'FinancialAssistant:currency_form' %}" class="btn btn-primary link">add new currency</a>

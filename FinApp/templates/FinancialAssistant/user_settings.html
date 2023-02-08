@@ -26,17 +26,17 @@
             <p> No family budget created yet, you can <a href="{% url 'FinancialAssistant:new_family_budget' %}"> create
                 one</a>.</p>
         {% endif %}
-        <ul class="list-group list-group-flush">
+        {% if family_data.family_members_names %}
+            <ul class="list-group list-group-flush">
             <p> You are sharing family budget with </p>
-            {% if family_data.family_members_names %}
-                {% for member_name in family_data.family_members_names %}
-                    <li class="list-group-item"> {{ member_name }} </li>
-                {% endfor %}
-            {% else %}
-                <li class="list-group-item"> ...yourself!</li>
-            {% endif %}
-            <br>
-            <p><a href="#" class="btn btn-primary link">edit family budget info</a></p>
+            {% for member_name in family_data.family_members_names %}
+                <li class="list-group-item"> {{ member_name }} </li>
+            {% endfor %}
+        {% else %}
+            <li class="list-group-item"> ...yourself!</li>
+        {% endif %}
+        <br>
+        <p><a href="#" class="btn btn-primary link">edit family budget info</a></p>
         </ul>
     </div>
 

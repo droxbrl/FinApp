@@ -1,19 +1,8 @@
+from typing import Optional
 from django import forms
+from django.contrib.auth.forms import UserChangeForm
+
 from .models import User, Family, Currency, Category, AppUser
-
-
-class AppUserForm(forms.ModelForm):
-    """Форма пользователя приложения."""
-
-    class Meta:
-        model = AppUser
-        # fields = ['family', 'use_family_budget', 'main_family_budget']
-        fields = ['family']
-
-        widgets = {
-            'family': forms.TextInput(attrs={'readonly': 'readonly'}),
-
-        }
 
 
 class CreateFamilyBudgetForm(forms.ModelForm):
@@ -23,10 +12,8 @@ class CreateFamilyBudgetForm(forms.ModelForm):
         model = Family
         fields = ['name']
         widgets = {
-            # 'user': forms.TextInput(attrs={'type': 'hidden'}),
             'name': forms.TextInput(attrs={'placeholder': 'Enter family name'})
         }
-
         labels = {
             "name": "Family name",
         }
@@ -54,18 +41,6 @@ class UserSettingsForm(forms.ModelForm):
         }
 
 
-class FamilyForm(forms.ModelForm):
-    """Форма настроек семьи."""
-
-    class Meta:
-        model = Family
-        fields = '__all__'
-
-    widgets = {
-
-    }
-
-
 class CategoryForm(forms.ModelForm):
     """Форма настроек категорий учета."""
 
@@ -88,3 +63,13 @@ class CurrencyForm(forms.ModelForm):
         widgets = {
 
         }
+
+
+class UserChangeCustomForm(UserChangeForm):
+    """Форма изменения пользовательских настроек."""
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email')
+
+

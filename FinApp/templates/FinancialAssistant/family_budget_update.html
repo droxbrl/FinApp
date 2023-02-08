@@ -3,13 +3,13 @@
 {% load bootstrap4 %}
 
 {% block title %}
-    App user edit
+    Family edit
 {% endblock %}
 
 {% block content %}
     {# Display a form #}
     <div class="container p-3 my-3 border">
-        <h1> App user data:</h1>
+        <h1>  Family edit:</h1>
         <form role="form" method="post">
             {% csrf_token %}
             {% bootstrap_form form %}

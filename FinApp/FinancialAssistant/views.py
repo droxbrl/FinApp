@@ -1,10 +1,10 @@
+from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, UpdateView, CreateView
-from django.views.generic.edit import FormMixin
 from .models import User, Category, Currency, get_app_user, AppUser, Family
-from .forms import UserSettingsForm, AppUserForm, CreateFamilyBudgetForm
+from .forms import UserSettingsForm, CreateFamilyBudgetForm, UserChangeCustomForm
 
 
 def index(request):
@@ -69,19 +69,8 @@ def check_owner(user, owner):
         raise Http404
 
 
-class AppUserDetailView(FormMixin, DetailView):
-    model = AppUser
-    form_class = AppUserForm
-    template_name = 'FinancialAssistant/app_user.html'
-
-    def get_context_data(self, **kwargs):
-        """Получаем данные формы."""
-        context = super(AppUserDetailView, self).get_context_data(**kwargs)
-        context['form'] = AppUserForm(initial={'family': self.object.family.name})
-        return context
-
-
 class FamilyBudgetCreateView(CreateView):
+    """Вью добавления семейного учета."""
     model = Family
     form_class = CreateFamilyBudgetForm
     template_name = 'FinancialAssistant/family_budget.html'
@@ -109,6 +98,35 @@ class FamilyBudgetCreateView(CreateView):
         return super(FamilyBudgetCreateView, self).get_success_url()
 
 
+class FamilyBudgetUpdateView(UpdateView):
+    """Вью редактирования семейного учета."""
+    model = Family
+    form_class = CreateFamilyBudgetForm
+    template_name = 'FinancialAssistant/family_budget_update.html'
+    success_url = reverse_lazy('FinancialAssistant:user_settings')
+
+    # def __init__(self, **kwargs):
+    #     super().__init__(**kwargs)
+    #     self.members_to_update = []
+    #
+    # def form_valid(self, form):
+    #     owner = get_app_user(user=self.request.user)
+    #     for member in form.cleaned_data['members']:
+    #         if member == owner:
+    #             member.main_family_budget = True
+    #         member.use_family_budget = True
+    #         self.members_to_update.append(member)
+    #
+    #     form.save()
+    #     return super(FamilyBudgetUpdateView, self).form_valid(form)
+    #
+    # def get_success_url(self):
+    #     for member in self.members_to_update:
+    #         member.family = self.object
+    #         member.save()
+    #     return super(FamilyBudgetUpdateView, self).get_success_url()
+
+
 def user_settings(request):
     """Вью пользовательских настроек."""
 
@@ -129,6 +147,27 @@ def user_settings(request):
     context = {'form_user_settings': form_user_settings,
                'family_data': family_data,
                'category_data': category_data,
-               'currency_data': currency_data}
+               'currency_data': currency_data,
+               'app_user': app_user}
 
     return render(context=context, request=request, template_name='FinancialAssistant/user_settings.html')
+
+
+# @login_required
+class UserUpdateView(UpdateView):
+    """Вью редактирования пользователя."""
+    model = User
+    template_name = 'FinancialAssistant/user_form.html'
+    fields = ['first_name', 'last_name', 'email']
+    success_url = reverse_lazy('FinancialAssistant:user_settings')
+
+
+class AppUserUpdateView(UpdateView):
+    """Вью редактирования доп настроек пользователя."""
+    model = AppUser
+    template_name = 'FinancialAssistant/app_user.html'
+    fields = ['tg_id',
+              'use_family_budget',
+              'main_family_budget',
+              ]
+    success_url = reverse_lazy('FinancialAssistant:user_settings')

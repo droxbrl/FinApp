@@ -6,22 +6,32 @@ from django.core.validators import MaxValueValidator
 from datetime import datetime
 
 
-class TelegramUser(models.Model):
-    """Модель для связи юзеров тг-бота и веб-версии."""
-    tg_id = models.BigIntegerField(verbose_name='telegram user id')
+class Family(models.Model):
+    """Модель семьи."""
+    name = models.CharField(max_length=250, unique=True)
+
+    def __str__(self):
+        return f'{self.name}'
+
+    def get_absolute_url(self):
+        return reverse('FinancialAssistant:user_settings')
+
+
+class AppUser(models.Model):
+    """Модель пользователя приложения."""
+    tg_id = models.BigIntegerField(verbose_name='telegram user id', null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    use_family_budget = models.BooleanField(default=False)
+    main_family_budget = models.BooleanField(default=False)
+    family = models.ForeignKey(Family, null=True, on_delete=models.SET_NULL, blank=True)
 
     def __str__(self):
-        return f'Telegram user <telegram id: {self.tg_id},  user: {self.user.__str__()}>'
-
-
-class OverallBudget(models.Model):
-    """Модель общего (семейного) учета."""
-    name = models.CharField(max_length=120)
-    users = models.ManyToManyField(User)
-
-    def __str__(self):
-        return f'Overall budget <name: {self.name}>'
+        if self.user.first_name and self.user.last_name:
+            return f'{self.user.first_name.capitalize()} {self.user.last_name.capitalize()}'
+        if self.user.first_name:
+            return f'{self.user.first_name.capitalize()} (username: {self.user.username})'
+        else:
+            return self.user.username
 
 
 class Currency(models.Model):
@@ -47,7 +57,6 @@ class Currency(models.Model):
 
     def get_absolute_url(self):
         return reverse('FinancialAssistant:currency_detail', args=(str(self.id)))
-
 
 
 class Category(models.Model):
@@ -84,7 +93,7 @@ class CashFlow(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     currency = models.ForeignKey(Currency, on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    family = models.ForeignKey(OverallBudget, on_delete=models.SET_NULL, null=True, blank=True)
+    family = models.ForeignKey(Family, on_delete=models.SET_NULL, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         """Перегружаю метод для проверки знака перед записью. Для расхода нужно добавлять '-', если его еще нет"""
@@ -97,17 +106,21 @@ class CashFlow(models.Model):
                f'category: {self.category}, currency: {self.currency}, added: {self.date_time}>'
 
 
-class UserSetting(models.Model):
-    """Хранит настройки пользователя."""
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    family = models.ForeignKey(OverallBudget, null=True, on_delete=models.SET_NULL, blank=True)
-    currencies = models.ManyToManyField(Currency, blank=True)
-    categories = models.ManyToManyField(Category, blank=True)
+def get_app_user(user: User) -> AppUser:
+    """Возвращает экземпляр класса AppUser для User."""
+    return AppUser.objects.filter(user=user).first()
 
-    def __str__(self):
-        if self.user.first_name:
-            user_name = self.user.first_name.capitalize()
-        else:
-            user_name = str(self.user).capitalize()
-        return f'<{user_name} settings: family: {self.family}, categories: {self.categories}, ' \
-               f'currencies: {self.currencies}>'
+# class UserSetting(models.Model):
+#     """Хранит настройки пользователя."""
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     family = models.ForeignKey(Family, null=True, on_delete=models.SET_NULL, blank=True)
+#     currencies = models.ManyToManyField(Currency, blank=True)
+#     categories = models.ManyToManyField(Category, blank=True)
+#
+#     def __str__(self):
+#         if self.user.first_name:
+#             user_name = self.user.first_name.capitalize()
+#         else:
+#             user_name = str(self.user).capitalize()
+#         return f'<{user_name} settings: family: {self.family}, categories: {self.categories}, ' \
+#                f'currencies: {self.currencies}>'

@@ -1,38 +1,15 @@
 from django.http import Http404
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views.generic import DetailView, UpdateView, CreateView
-from .models import User, OverallBudget, Category, Currency
-from .forms import UserSettingsForm, OverallBudgetSettings
+from django.views.generic.edit import FormMixin
+from .models import User, Category, Currency, get_app_user, AppUser, Family
+from .forms import UserSettingsForm, AppUserForm, CreateFamilyBudgetForm
 
 
 def index(request):
     """Домашняя страница приложения."""
     return render(request=request, template_name='FinancialAssistant/index.html')
-
-
-#
-def user_settings(request):
-    """Вью пользовательских настроек."""
-    #     form = UserSettingsForm(instance=user_settings_data, initial={'user': request.user})
-    #     form = UserSettingsForm(initial={'user': request.user})
-
-    user_settings_data = User.objects.filter(id=request.user.id).first()
-    form_user_settings = UserSettingsForm(instance=user_settings_data)
-
-    overall_budget_data = OverallBudget.objects.filter(users=request.user).first()
-
-    form_overall_budget_settings = OverallBudgetSettings(instance=overall_budget_data)
-
-    category_data = Category.objects.filter(user=request.user)
-
-    currency_data = Currency.objects.filter(user=request.user)
-
-    context = {'form_user_settings': form_user_settings,
-               'form_overall_budget_settings': form_overall_budget_settings,
-               'category_data': category_data,
-               'currency_data': currency_data}
-
-    return render(context=context, request=request, template_name='FinancialAssistant/user_settings.html')
 
 
 class CategoryCreateView(CreateView):
@@ -88,3 +65,68 @@ def check_owner(user, owner):
         pass
     else:
         raise Http404
+
+
+class AppUserDetailView(FormMixin, DetailView):
+    model = AppUser
+    form_class = AppUserForm
+    template_name = 'FinancialAssistant/app_user.html'
+
+    def get_context_data(self, **kwargs):
+        """Получаем данные формы."""
+        context = super(AppUserDetailView, self).get_context_data(**kwargs)
+        context['form'] = AppUserForm(initial={'family': self.object.family.name})
+        return context
+
+
+class FamilyBudgetCreateView(CreateView):
+    model = Family
+    form_class = CreateFamilyBudgetForm
+    template_name = 'FinancialAssistant/family_budget.html'
+    success_url = reverse_lazy('FinancialAssistant:user_settings')
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.members_to_update = []
+
+    def form_valid(self, form):
+        owner = get_app_user(user=self.request.user)
+        for member in form.cleaned_data['members']:
+            if member == owner:
+                member.main_family_budget = True
+            member.use_family_budget = True
+            self.members_to_update.append(member)
+
+        form.save()
+        return super(FamilyBudgetCreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        for member in self.members_to_update:
+            member.family = self.object
+            member.save()
+        return super(FamilyBudgetCreateView, self).get_success_url()
+
+
+def user_settings(request):
+    """Вью пользовательских настроек."""
+
+    user_settings_data = User.objects.filter(id=request.user.id).first()
+    form_user_settings = UserSettingsForm(instance=user_settings_data)
+    category_data = Category.objects.filter(user=request.user)
+    currency_data = Currency.objects.filter(user=request.user)
+    app_user = get_app_user(user=request.user)
+    family_data={}
+    if app_user.family:
+        family_members = []
+        for member in AppUser.objects.filter(family=app_user.family):
+            if member != app_user:
+                family_members.append(member)
+        family_data = {'family': app_user.family,
+                       'family_members_names': family_members}
+
+    context = {'form_user_settings': form_user_settings,
+               'family_data': family_data,
+               'category_data': category_data,
+               'currency_data': currency_data}
+
+    return render(context=context, request=request, template_name='FinancialAssistant/user_settings.html')

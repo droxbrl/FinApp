@@ -12,4 +12,10 @@ urlpatterns = [
     path('new_currency/', views.CurrencyCreateView.as_view(), name='currency_form'),
     path('new_currency/edit/<int:pk>/', views.CurrencyUpdateView.as_view(), name='currency_update'),
     path('new_currency/<int:pk>/', views.CurrencyDetailView.as_view(), name='currency_detail'),
+
+    path('app_user/<int:pk>/', views.AppUserDetailView.as_view(), name='app_user'),
+
+    path('new_family_budget/', views.FamilyBudgetCreateView.as_view(), name='new_family_budget'),
+
+
 ]

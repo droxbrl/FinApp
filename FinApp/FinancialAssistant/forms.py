@@ -1,5 +1,43 @@
 from django import forms
-from .models import User, OverallBudget, Currency, Category
+from .models import User, Family, Currency, Category, AppUser
+
+
+class AppUserForm(forms.ModelForm):
+    """Форма пользователя приложения."""
+
+    class Meta:
+        model = AppUser
+        # fields = ['family', 'use_family_budget', 'main_family_budget']
+        fields = ['family']
+
+        widgets = {
+            'family': forms.TextInput(attrs={'readonly': 'readonly'}),
+
+        }
+
+
+class CreateFamilyBudgetForm(forms.ModelForm):
+    """Форма пользователя приложения."""
+
+    class Meta:
+        model = Family
+        fields = ['name']
+        widgets = {
+            # 'user': forms.TextInput(attrs={'type': 'hidden'}),
+            'name': forms.TextInput(attrs={'placeholder': 'Enter family name'})
+        }
+
+        labels = {
+            "name": "Family name",
+        }
+
+    members = forms.ModelMultipleChoiceField(
+        queryset=AppUser.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        label='Mark family members:'
+    )
+
+    field_order = ['name', 'members']
 
 
 class UserSettingsForm(forms.ModelForm):
@@ -15,31 +53,21 @@ class UserSettingsForm(forms.ModelForm):
             'email': forms.TextInput(attrs={'readonly': 'readonly'}),
         }
 
-    # def __init__(self, *args, **kwargs):
-    #     super(UserSettingsForm, self).__init__(*args, **kwargs)
-    #     if 'initial' in kwargs:
-    #         initial = kwargs.get('initial')
-    #         self.fields['user'].queryset = User.objects.filter(id=initial.get('user').id)
-    #         self.fields['family'].queryset = OverallBudget.objects.filter(users=initial.get('user'))
-    #         self.fields['currencies'].queryset = Currency.objects.filter(user=initial.get('user'))
-    #         self.fields['categories'].queryset = Category.objects.filter(user=initial.get('user'))
 
-
-class OverallBudgetSettings(forms.ModelForm):
-    """Форма настроек семейного учета."""
+class FamilyForm(forms.ModelForm):
+    """Форма настроек семьи."""
 
     class Meta:
-        model = OverallBudget
+        model = Family
         fields = '__all__'
 
-        widgets = {
-            'name': forms.TextInput(attrs={'readonly': 'readonly'}),
-            # 'users': forms.Select(attrs={'readonly': 'readonly'}),
-        }
+    widgets = {
+
+    }
 
 
 class CategoryForm(forms.ModelForm):
-    """Форма настроек катерогий учета."""
+    """Форма настроек категорий учета."""
 
     class Meta:
         model = Category
@@ -50,7 +78,7 @@ class CategoryForm(forms.ModelForm):
         }
 
 
-class CategoryForm(forms.ModelForm):
+class CurrencyForm(forms.ModelForm):
     """Форма настроек семейного учета."""
 
     class Meta:

@@ -1,0 +1,17 @@
+{% extends 'FinancialAssistant/base.html' %}
+{% load bootstrap4 %}
+
+{% block title %}
+    App user
+{% endblock %}
+
+{% block content %}
+
+    <div class="container p-3 my-3 border">
+        <h1> App user data:</h1>
+        <form role="form" method="get">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+        </form>
+    </div>
+{% endblock %}

@@ -10,7 +10,7 @@
 
     <div class="container p-3 my-3 border">
         <h1>User info</h1>
-        {# Display a form_user_settings #}
+
         <form role="form" method="get">
             {% csrf_token %}
             {% bootstrap_form form_user_settings %}
@@ -21,23 +21,23 @@
 
     <div class="container p-3 my-3 border">
         <h1>Family budget info</h1>
+
         {% if not family_data %}
             <p> No family budget created yet, you can <a href="{% url 'FinancialAssistant:new_family_budget' %}"> create
                 one</a>.</p>
-        {% else %}
-
-
-
-            <ul class="list-group list-group-flush">
-                <p> You are sharing family budget with </p>
+        {% endif %}
+        <ul class="list-group list-group-flush">
+            <p> You are sharing family budget with </p>
+            {% if family_data.family_members_names %}
                 {% for member_name in family_data.family_members_names %}
                     <li class="list-group-item"> {{ member_name }} </li>
                 {% endfor %}
-                <br>
-                <p><a href="#" class="btn btn-primary link">edit family budget info</a></p>
-            </ul>
-
-        {% endif %}
+            {% else %}
+                <li class="list-group-item"> ...yourself!</li>
+            {% endif %}
+            <br>
+            <p><a href="#" class="btn btn-primary link">edit family budget info</a></p>
+        </ul>
     </div>
 
     <div class="container p-3 my-3 border">

@@ -105,26 +105,6 @@ class FamilyBudgetUpdateView(UpdateView):
     template_name = 'FinancialAssistant/family_budget_update.html'
     success_url = reverse_lazy('FinancialAssistant:user_settings')
 
-    # def __init__(self, **kwargs):
-    #     super().__init__(**kwargs)
-    #     self.members_to_update = []
-    #
-    # def form_valid(self, form):
-    #     owner = get_app_user(user=self.request.user)
-    #     for member in form.cleaned_data['members']:
-    #         if member == owner:
-    #             member.main_family_budget = True
-    #         member.use_family_budget = True
-    #         self.members_to_update.append(member)
-    #
-    #     form.save()
-    #     return super(FamilyBudgetUpdateView, self).form_valid(form)
-    #
-    # def get_success_url(self):
-    #     for member in self.members_to_update:
-    #         member.family = self.object
-    #         member.save()
-    #     return super(FamilyBudgetUpdateView, self).get_success_url()
 
 
 def user_settings(request):
